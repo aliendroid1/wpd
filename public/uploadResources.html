@@ -1,0 +1,67 @@
+<head>        
+    <script src="writeHeaderData.js"></script>
+    <title>WPD Resource Hub</title>
+</head>
+<body>
+    <script src="writeNavbar.js"></script>
+
+
+    <script>
+        firebase.auth().onAuthStateChanged(function(user) 
+        {
+            if(user)
+            {
+                document.getElementById('submit-warning').style.display = "none";
+                document.getElementById('form-submit-button').disabled = false;
+            }
+            else
+            {
+                document.getElementById('form-submit-button').disabled = true;
+            }
+        });
+        </script>
+
+    <script>
+        function submitForm()
+        {
+            firebase.auth().onAuthStateChanged(function(user) 
+            {
+                if(user)
+                {
+                    firebase.firestore().collection("links").add(
+                        {     
+                            linkName    : document.getElementById("link-name").value,
+                            link        : document.getElementById("link").value,
+                        })
+                        .then (function(doc)
+                        {
+                            alert("Document successfully submitted.")
+                        })
+                        .catch(function(error){alert("Error submitting document:", error);});
+                }
+            });
+        }
+    </script>
+
+    <h1 class="text-center">link upload</h1>
+    <div class="container mt-3">
+        <label>link name:      </label><input type="text"   class="form-control" id="link-name">
+        <label>link     :      </label><input type="text"   class="form-control" id="link">
+        <br>
+        <p class="text-danger text-center" id="submit-warning">You must be signed in to submit a form!</p>
+        <div class="d-flex justify-content-center"><button type="button" class="btn btn-warning" id="form-submit-button" onclick="submitForm()" disabled>Submit</button></div>
+        <br>
+    </div>
+
+
+   
+       
+          
+ 
+            
+
+           
+
+
+</body>
+</html>
