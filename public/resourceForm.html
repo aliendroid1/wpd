@@ -5,7 +5,6 @@
 <body>
     <script src="writeNavbar.js"></script>
 
-
     <script>
         firebase.auth().onAuthStateChanged(function(user) 
         {
@@ -13,15 +12,33 @@
             {
                 document.getElementById('submit-warning').style.display = "none";
                 document.getElementById('form-submit-button').disabled = false;
+                document.getElementById('officer-name').value = user.displayName;
+                document.getElementById('officer-email').value = user.email;
             }
             else
             {
                 document.getElementById('form-submit-button').disabled = true;
             }
         });
-    </script>
+        </script>
 
-    <script>
+    <h1 class="text-center">Resources Submission</h1>
+    <div class="container mt-3">
+
+        <label>Case Number: </label><input type="number" class="form-control" id="case-number">
+        <label>Name:        </label><input type="text" class="form-control" id="officer-name">
+        <label>Email:       </label><input type="email" class="form-control" id="officer-email">
+        <h5>Link Selection:</h5>
+            <div class="checkbox"><label><input type="checkbox" value="">   WPD Section Website </label></div>
+            <div class="checkbox"><label><input type="checkbox" value="">   WPD Website</label></div>
+            <div class="checkbox"><label><input type="checkbox" value="">   Wichita Gov Website</label></div>
+        <br>
+        <p class="text-danger text-center" id="submit-warning">You must be signed in to submit a form!</p>
+        <div class="d-flex justify-content-center"><button type="button" class="btn btn-warning" id="form-submit-button" onclick="submitPageForm()" disabled>Submit</button></div>
+        <br>
+    </div>
+
+    <!-- <script>
         function submitPageForm()
         {
             firebase.auth().onAuthStateChanged(function(user) 
@@ -53,26 +70,10 @@
                 }
             });
         }
-    </script>
+    </script> -->
 
 
 
-    <h1 class="text-center">Tutoring session submission</h1>
-    <div class="container mt-3">
-
-        <label>Case Number: </label><input type="number" class="form-control" id="tutee-email">
-        <label>Name:        </label><input type="text" class="form-control" id="subject-letters">
-        <label>ID:          </label><input type="text" class="form-control" id="session-date">
-        <label>Rank:        </label><input type="time" class="form-control" id="session-start">
-        <label>Email:       </label><input type="email" class="form-control" id="session-end">
-        <label>Section:     </label><input type="text" class="form-control" id="tutor-notes">
-        <label>Comments:    </label><input type="text" class="form-control" id="tutor-notes">
-        <br>
-
-        <p class="text-danger text-center" id="submit-warning">You must be signed in to submit a form!</p>
-        <div class="d-flex justify-content-center"><button type="button" class="btn btn-warning" id="form-submit-button" onclick="submitPageForm()" disabled>Submit</button></div>
-        <br>
-    </div>
 
        
           
