@@ -1,0 +1,87 @@
+<head>        
+    <script src="writeHeaderData.js"></script>
+    <title>WPD Resource Hub</title>
+</head>
+<body>
+    <script src="writeNavbar.js"></script>
+
+    <script>
+        firebase.auth().onAuthStateChanged(function(user) 
+        {
+            if(user)
+            {
+                document.getElementById('submit-warning').style.display = "none";
+                document.getElementById('form-submit-button').disabled = false;
+                document.getElementById('officer-name').value = user.displayName;
+                document.getElementById('officer-email').value = user.email;
+            }
+            else
+            {
+                document.getElementById('form-submit-button').disabled = true;
+            }
+        });
+        </script>
+
+    <h1 class="text-center">Resources Submission</h1>
+    <div class="container mt-3">
+
+        <label>Case Number: </label><input type="number" class="form-control" id="case-number">
+        <label>Name:        </label><input type="text" class="form-control" id="officer-name">
+        <label>Email:       </label><input type="email" class="form-control" id="officer-email">
+        <h5>Link Selection:</h5>
+            <div class="checkbox"><label><input type="checkbox" value="">   WPD Section Website </label></div>
+            <div class="checkbox"><label><input type="checkbox" value="">   WPD Website</label></div>
+            <div class="checkbox"><label><input type="checkbox" value="">   Wichita Gov Website</label></div>
+        <br>
+        <p class="text-danger text-center" id="submit-warning">You must be signed in to submit a form!</p>
+        <div class="d-flex justify-content-center"><button type="button" class="btn btn-warning" id="form-submit-button" onclick="submitPageForm()" disabled>Submit</button></div>
+        <br>
+    </div>
+
+    <!-- <script>
+        function submitPageForm()
+        {
+            firebase.auth().onAuthStateChanged(function(user) 
+            {
+                if(user)
+                {
+                    firebase.firestore().collection("tutoringSessionConfirmations").add(
+                        {     
+                            tutorEmail                : user.email,
+                            tutorSubmissionTimestamp  : firebase.firestore.FieldValue.serverTimestamp(),
+                            tutorSignature            : document.getElementById("tutor-signature").value,
+                            sessionDate               : document.getElementById("session-date").value,
+                            sessionStart              : document.getElementById("session-start").value,
+                            sessionEnd                : document.getElementById("session-end").value,
+                            subject                   : +document.getElementById("subject-number").value, 
+                            conceptCovered            : document.getElementById("concept-covered").value,
+                            tutorNotes                : document.getElementById("tutor-notes").value,
+                            tuteeEmail                : document.getElementById("tutee-email").value,
+                            tuteeSignature            : null,
+                            tuteeSignatureTimestamp   : null
+                        })
+                        .then (function(doc)
+                        {
+                            let uri = "https://bubbly-polygon-267201.web.app/tutoringSessionConfirmation2.html" + "?"+ doc.id;
+
+                            alert("Document successfully submitted.")
+                        })
+                        .catch(function(error){alert("Error adding document:", error);});
+                }
+            });
+        }
+    </script> -->
+
+
+
+
+       
+          
+ 
+            
+
+           
+
+
+</body>
+</html>
