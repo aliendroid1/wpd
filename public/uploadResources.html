@@ -1,5 +1,6 @@
 <head>        
     <script src="writeHeaderData.js"></script>
+    <script src = "https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script>
     <title>WPD Resource Hub</title>
 </head>
 <body>
@@ -19,9 +20,24 @@
                 document.getElementById('form-submit-button').disabled = true;
             }
         });
-        </script>
-
-    <script>
+        function getDeparts(){
+            firebase.auth().onAuthStateChanged(function(user) 
+            {
+                if(user)
+                {
+                    var leadsRef = database.ref('Department');
+                    console.log(leadsRef);
+                    leadsRef.on('value', function(snapshot) {
+                        console.log(snapshot);
+                        snapshot.forEach(function(childSnapshot) {
+                            console.log(childSnapshot.val());
+                        var childData = childSnapshot.val();
+                        
+                        });
+                    });
+                }
+            });
+        }
         function submitForm()
         {
             firebase.auth().onAuthStateChanged(function(user) 
