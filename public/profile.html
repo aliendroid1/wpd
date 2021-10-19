@@ -6,28 +6,101 @@
     <script src="writeNavbar.js"></script>
 
     <script>
+        var profile;// = firebase.firestore().collection("books").doc("another book");
         firebase.auth().onAuthStateChanged(function(user) 
         {
             if(user)
             {
-                document.getElementById('user-displayName').value = user.displayName;
+                
                 document.getElementById('user-email').value = user.email;
+                firebase.firestore().collection("profile")
+                .where("email", "==", user.email)
+                
+                .get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach((doc) => {
+                        profile=doc;
+                    // doc.data() is never undefined for query doc snapshots
+                    document.getElementById('id').value = doc.id;
+                    document.getElementById('user-displayName').value = doc.data().name;
+                    document.getElementById('user-id').value = doc.data().id_number;
+                    document.getElementById('user-rank').value = doc.data().rank;
+                    document.getElementById('user-phone').value = doc.data().phone;
+                    document.getElementById('user-stationNumber').value = doc.data().station_phone;
+                    document.getElementById('profile-changes-submit-btn').disabled = false;
+
+                    // console.log(doc.id);
+                    });
+                })
+                .catch((e) => {
+                    console.log(e);
+                });
             }
-        })
+        });
+        function submitForm()
+        {
+            firebase.auth().onAuthStateChanged(function(user) 
+            {
+                if(user)
+                {
+                    firebase.firestore().collection("profile").doc(document.getElementById('id').value)
+                        .update({
+                            name            : document.getElementById("user-displayName").value,
+                            id_number       : document.getElementById("user-id").value,
+                            rank            : document.getElementById("user-rank").value,
+                            phone           : document.getElementById("user-phone").value,
+                            station_phone   : document.getElementById("user-stationNumber").value,
+                        })
+                        .then(() => {
+                            console.log("Document updated"); // Document updated
+                            $('#message').html('Update was successfull');
+                            $("#success-alert").show(1000);
+                            setTimeout(function() {
+                                $("#success-alert").hide(1000);
+                            }, 4000);
+                        })
+                        .catch((error) => {
+                            console.error("Error updating doc", error);
+                            $('#message').html('Update failed');
+                            $("#danger-alert").show(1000);
+                            setTimeout(function() {
+                                $("#danger-alert").hide(1000);
+                            }, 4000);
+                        });
+                }
+            });
+        }
     </script>
 
     <h1 class="text-center">My Profile</h1>
     
     <div class="container mt-3">
+        <div class="alert alert-success" id="success-alert" style="display:none">
+            <button type="button" class="close" data-dismiss="alert">x</button>
+            <span id="message"></span>
+          </div>
+          <div class="alert alert-danger" id="danger-alert" style="display:none">
+            <button type="button" class="close" data-dismiss="alert">x</button>
+            <span id="message"></span>
+          </div>
         <label>Display Name: </label>
-        <input type="text" class="form-control" id="user-displayName" disabled>
+        <input type="hidden" id="id">
+        <input type="text" class="form-control" id="user-displayName">
+        <label>ID Number: </label>
+        <input type="text" class="form-control" id="user-id" >
+        <label>Employee Rank: </label>
+        <input type="text" class="form-control" id="user-rank" >
         <label>Email: </label>
         <input type="email" class="form-control" id="user-email" disabled>
+        <label>Phone Number: </label>
+        <input type="text" class="form-control" id="user-phone" >
+        <label>Station Phone Number: </label>
+        <input type="text" class="form-control" id="user-stationNumber" >
         <br>
         <div class="d-flex justify-content-center">
-            <button type="button" class="btn btn-warning" id="profile-changes-submit-btn" onclick="initializeUser()" disabled>Save changes</button>
+            <button type="button" class="btn btn-warning" id="profile-changes-submit-btn" onclick="submitForm()" disabled>Save changes</button>
         </div>
     </div>
-    
+ 
 </body>
 </html>

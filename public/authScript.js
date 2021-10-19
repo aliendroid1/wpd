@@ -5,7 +5,9 @@ function toggleSignIn() //Function called when clicking the Login/Logout button.
     if (!firebase.auth().currentUser)
     {
         var provider = new firebase.auth.GoogleAuthProvider();
-        provider.addScope('https://www.googleapis.com/auth/plus.login');
+           
+        provider.addScope('http://localhost:4000/auth/plus.login');
+        //provider.addScope('https://www.googleapis.com/auth/plus.login');
         firebase.auth().signInWithRedirect(provider);
     }
     else 
@@ -18,9 +20,9 @@ function initApp() //handles setting up UI event listeners and registering Fireb
         if (result.credential) {
           // This gives you a Google Access Token. You can use it to access the Google API.
           var token = result.credential.accessToken;
-          document.getElementById('quickstart-oauthtoken').textContent = token;
+        //  document.getElementById('quickstart-oauthtoken').textContent = token;
         } else {
-          document.getElementById('quickstart-oauthtoken').textContent = 'null';
+        //  document.getElementById('quickstart-oauthtoken').textContent = 'null';
         }
         var user = result.user;
       }).catch(function(error) {
@@ -55,4 +57,18 @@ function initApp() //handles setting up UI event listeners and registering Fireb
         document.getElementById('sign-in-button').disabled = false;
     });
 }
+var config = {
+  apiKey: "AIzaSyDUxm4IWiOSAzeAhbm3xzdcqTKllQpiyss",
+  authDomain: "wpdresourcehub.firebaseapp.com",
+  storageBucket: "wpdresourcehub.appspot.com",
+  messagingSenderId: "865510208619",
+};
+
+// var serviceAccount = require("wpdresourcehub-e3af9d78a67e.json");
+  // projectId: "wpdresourcehub",
+  
+  
+  // appId: "1:865510208619:web:b2cfc8b743e752fd5b2d2e",
+  // measurementId: "G-DPQ35C1Y7F"
+
 window.onload = function (){initApp();};

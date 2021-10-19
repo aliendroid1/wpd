@@ -1,0 +1,13 @@
+{
+    "type": "service_account",
+    "project_id": "wpdresourcehub",
+    "private_key_id": "e3af9d78a67ef6a604fcf1a5b8d331ff15b050b5",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCmZ3t4NIIEn7qb\nqwtOT+HGPIOILMJh0YERrZ7cyKmjoJk8B44lxXlAaT21O4m2UrSyg5uaoUw6XxJR\nnhqFrpuBOOCnHHrW0OY0bSery3gE00sgRQqXneboMDxGhUTqfDs2uF4x0WMrUuKw\nTviqHLxUBZAxgduzkdSUR0hZOsA1ogb5KpdrVwIkSnDGU6N2wb5t+6yyzFqQfqkL\nEzRggne/8htfsNEf94gZYCHK2IicujaOcb4e+scdYAxRZWlzntYLE70eT5VKhe+G\nuJd2xP5EbS5xlE+fLIZbE7r1BGN5dIdyCdef+MbRWMYA/YrXUv3fV3ewz7esOUgj\n0ZVuZSfFAgMBAAECggEAB2KLT7vg00y1bugp4clYxz/zRG1cGRQ/qqWuabT8Fldv\nxYK+U73OUkX5Z5wjUfScsVl24+dppyOGABpIqgskOploGvKAHx15QfVgL9chVfF8\noYt+21i2ITLW0fhjJRbrV9PZ1lMpGAifJ9zxWzdYQlBW5GOTeQYtTYFWXCNn2Vlr\nhmYMMrCZjypPPpH7KbOw0MW9mhlqzFocMo3oppXSnVsc3EgNkgKFDG4/F7WAXSJf\nDp+UMT9A4/ERj19B9Szy9qBgVN9Z9oSa18WOshOkM4djrngMs0qmgY2NAUYT6d5k\n/do1+rHzBnL5RQDwRNM+KnsVc6USK8AzjOv48z+ytwKBgQDqmqMVunJe7fy+tZvQ\nyCoh32jCfXn8UBooNE9sdbZpnn1XtSrZuJw1HNSGSLTVUi0JLLe/DT9Jqy/5khrc\nFTVM4Pii6df0dcLHW/yjT8FbrxaG+dwYUX5D/wMtX8EUNFdy/2+9rKNms2yCaM6+\noXXZn7hFhVkhen+riCY+n+BCjwKBgQC1lJDfO6vM0j0ctaTKZGfyxhBwfl/51+xm\nBeOU0sVCnh0JE9gk50hlKqQHxjaHn1YEaO6ab6b4QgBpUWq83D30aFk/Jotb1iom\nat0u78DZXAfnVkvlJxkWM2U4ngNvqk6aK0om5b2zhdP+8UhXyJavHv0/v5hm2zb3\necfHttRKawKBgCQyt/ciTYNYNSc33lLYj6eqUP+xXKERuvd5GsghYYPqcGyYB4SQ\nd4m6aRBPJ5fCljBUNgXEhX9Yao6XfI14uECkdbitXCTcBrG7/78zDyKWYWNyKgOW\nj2TudA8MNz5m1RdpUlRxzsSJ6rQ0d7HyN7zcaBJSAO6peAl/eGcxQ+kBAoGAa2P6\naox4ByMwUZJ8a9cGQ2cwwdd8G9/ASHajKpmdYNDyizPZWboP7wVRDegEyCFMVj9Z\nHq16KsmeRKuKXThEzBAK+HZrZV08gIwjVGcnv2XWptM6/8Qn6iFrdBjAH4KyCiwg\nJvEpSMuVnepFxuUzeU7yqIlAMVTlJWg4570RwRECgYEAr8d9C5g29tyMz8acaCyd\nEreBwVZhRedNgt+B68+OM1Q4wjojaaxdDGR+A/3d0yBLSvd6s+XMlUG1mrJHZWkK\nUdXzmpalayy5xvE7nSu54U0qf7rB3hGHtAKOWNvQduRzBNFZw6MVsJM2acPEdaa/\n39BGffV2vv3/90ai6oE4EZk=\n-----END PRIVATE KEY-----\n",
+    "client_email": "wpdresourcehub@appspot.gserviceaccount.com",
+    "client_id": "105690798780339292672",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/wpdresourcehub%40appspot.gserviceaccount.com"
+  }
+  

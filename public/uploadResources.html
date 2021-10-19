@@ -1,6 +1,6 @@
 <head>        
     <script src="writeHeaderData.js"></script>
-    <script src = "https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script>
+    <!-- <script src = "https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script> -->
     <title>WPD Resource Hub</title>
 </head>
 <body>
@@ -8,34 +8,52 @@
 
 
     <script>
+//         firebase.initializeApp({databaseURL: "https://wpdresourcehub.firebaseio.com"
+//   });
+       
+//         var database = firebase.database();
         firebase.auth().onAuthStateChanged(function(user) 
         {
+            console.log('USer');
             if(user)
             {
+                var snapshot = firebase.firestore().collection('Department').get();
                 document.getElementById('submit-warning').style.display = "none";
                 document.getElementById('form-submit-button').disabled = false;
+                getDeparts();
             }
             else
             {
                 document.getElementById('form-submit-button').disabled = true;
             }
         });
+        
+    
         function getDeparts(){
             firebase.auth().onAuthStateChanged(function(user) 
             {
-                if(user)
-                {
-                    var leadsRef = database.ref('Department');
-                    console.log(leadsRef);
-                    leadsRef.on('value', function(snapshot) {
-                        console.log(snapshot);
-                        snapshot.forEach(function(childSnapshot) {
-                            console.log(childSnapshot.val());
-                        var childData = childSnapshot.val();
-                        
-                        });
+                var select = document.getElementById("departments");
+                var option = document.createElement('option');
+                        option.text = "Select Department";
+                        option.value = "";
+                        select.add(option, 0);
+                firebase.firestore().collection("Department")
+                .orderBy("Department_name", "desc")
+                .get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach((doc) => {
+                        var option = document.createElement('option');
+                        option.text = doc.data().Department_name;
+                        option.value = doc.id;
+                        select.add(option, 0);
                     });
-                }
+                })
+                .catch((e) => {
+                    console.log(e);
+                });
+
+                   
+                
             });
         }
         function submitForm()
@@ -61,23 +79,40 @@
 
     <h1 class="text-center">link upload</h1>
     <div class="container mt-3">
-        <label>link name:      </label><input type="text"   class="form-control" id="link-name">
+        <label>Departments:      </label><select class="form-control" id="departments">
+            </select>
+        <label>Title:      </label><input type="text"   class="form-control" id="link-name">
         <label>link     :      </label><input type="text"   class="form-control" id="link">
+        <label>Document Name     :      </label><input type="text" class="form-control" id="docName">
+        <label>Image/PDF     :      </label><input type="file" class="form-control" id="file">
+        <progress id="uploader" value="0" max="100">0%</progress>
+		<input type="file" id="fileButton" value="upload"/>
         <br>
         <p class="text-danger text-center" id="submit-warning">You must be signed in to submit a form!</p>
         <div class="d-flex justify-content-center"><button type="button" class="btn btn-warning" id="form-submit-button" onclick="submitForm()" disabled>Submit</button></div>
         <br>
     </div>
+    <script>
+        
+        var uploader = document.getElementById('uploader');
+var fileButton =         document.getElementById('fileButton');
+fileButton.addEventListener('change', function(e){
+var file = e.target.files[0];
+// var ref = firebase.storage().ref();
+// console.log(ref);
+var storageRef = firebase.storage().ref('img/'+file.name);
+var task = storageRef.put(file);
+task.on('state_changed', function progress(snapshot) {
+  var percentage = (snapshot.bytesTransferred/snapshot.totalBytes)*100;
+  uploader.value = percentage;
+
+}, function error(err) {
 
 
-   
-       
-          
- 
-            
+},function complete() {
 
-           
-
-
+});
+}); 
+  </script>
 </body>
 </html>

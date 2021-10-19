@@ -1,0 +1,80 @@
+<head>        
+    <script src="writeHeaderData.js"></script>
+    <title>WPD Resource Hub</title>
+</head>
+<body>
+    <script src="writeNavbar.js"></script>
+
+
+    <script>
+        firebase.auth().onAuthStateChanged(function(user) 
+        {
+            console.log('USer');
+            if(user)
+            {
+                var snapshot = firebase.firestore().collection('Department').get();
+                document.getElementById('submit-warning').style.display = "none";
+                document.getElementById('form-submit-button').disabled = false;
+                
+                console.log(snapshot);
+                getDeparts();
+            }
+            else
+            {
+                document.getElementById('form-submit-button').disabled = true;
+            }
+        });
+        
+    
+        function getDeparts(){
+            console.log('1');
+            firebase.auth().onAuthStateChanged(function(user) 
+            {
+               
+                    console.log('3');
+                    var leadsRef = firebase.firestore().collection('Department').get();
+                    console.log(leadsRef);
+                    leadsRef.on('value', function(snapshot) {
+                        console.log(snapshot);
+                        snapshot.forEach(function(childSnapshot) {
+                            console.log(childSnapshot.val());
+                        var childData = childSnapshot.val();
+                        
+                        });
+                    });
+                
+            });
+        }
+        function submitForm()
+        {
+            firebase.auth().onAuthStateChanged(function(user) 
+            {
+                if(user)
+                {
+                    firebase.firestore().collection("Department").add(
+                        {     
+                            department_name    : document.getElementById("link-name").value,
+                        })
+                        .then (function(doc)
+                        {
+                            alert("Document successfully submitted.")
+                        })
+                        .catch(function(error){alert("Error submitting document:", error);});
+                }
+            });
+        }
+    </script>
+
+    <h1 class="text-center">Create Department</h1>
+    <div class="container mt-3">
+        <label>Department name:      </label><input type="text"   class="form-control" id="link-name">
+       
+        <br>
+        <p class="text-danger text-center" id="submit-warning">You must be signed in to submit a form!</p>
+        <div class="d-flex justify-content-center"><button type="button" class="btn btn-warning" id="form-submit-button" onclick="submitForm()" disabled>Submit</button></div>
+        <br>
+    </div>
+
+<script></script>
+</body>
+</html>
