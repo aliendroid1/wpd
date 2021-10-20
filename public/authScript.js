@@ -6,8 +6,8 @@ function toggleSignIn() //Function called when clicking the Login/Logout button.
     {
         var provider = new firebase.auth.GoogleAuthProvider();
            
-        provider.addScope('http://localhost:4000/auth/plus.login');
-        //provider.addScope('https://www.googleapis.com/auth/plus.login');
+        //provider.addScope('http://localhost:4000/auth/plus.login');
+        provider.addScope('https://www.googleapis.com/auth/plus.login');
         firebase.auth().signInWithRedirect(provider);
     }
     else 
@@ -57,20 +57,20 @@ function initApp() //handles setting up UI event listeners and registering Fireb
         document.getElementById('sign-in-button').disabled = false;
     });
 }
-var config = {
-  apiKey: "AIzaSyDUxm4IWiOSAzeAhbm3xzdcqTKllQpiyss",
-  authDomain: "wpdresourcehub.firebaseapp.com",
-  storageBucket: "wpdresourcehub.appspot.com",
-  messagingSenderId: "865510208619",
-};
-var firebaseConfig = {
-  apiKey: "AIzaSyDUxm4IWiOSAzeAhbm3xzdcqTKllQpiyss",
-authDomain: "wpdresourcehub.firebaseapp.com",
-storageBucket: "wpdresourcehub.appspot.com",
-messagingSenderId: "865510208619",
-projectId: "wpdresourcehub",
-appId: "1:865510208619:web:b2cfc8b743e752fd5b2d2e"
-};
+// var config = {
+//   apiKey: "AIzaSyDUxm4IWiOSAzeAhbm3xzdcqTKllQpiyss",
+//   authDomain: "wpdresourcehub.firebaseapp.com",
+//   storageBucket: "wpdresourcehub.appspot.com",
+//   messagingSenderId: "865510208619",
+// };
+// var firebaseConfig = {
+//   apiKey: "AIzaSyDUxm4IWiOSAzeAhbm3xzdcqTKllQpiyss",
+// authDomain: "wpdresourcehub.firebaseapp.com",
+// storageBucket: "wpdresourcehub.appspot.com",
+// messagingSenderId: "865510208619",
+// projectId: "wpdresourcehub",
+// appId: "1:865510208619:web:b2cfc8b743e752fd5b2d2e"
+// };
 
 
 
