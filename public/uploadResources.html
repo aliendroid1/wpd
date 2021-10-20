@@ -20,8 +20,8 @@
         <label>Title:      </label><input type="text"   class="form-control" id="link-name">
         <label>link     :      </label><input type="url"   class="form-control" id="link">
         <label>Document Name     :      </label><input type="text" class="form-control" id="docName">
-        <label>Image/PDF     :      </label><input type="file" class="form-control" id="file">
-        <!-- onchange="return fileValidation()" -->
+        <label>Image/PDF     :      </label><input type="file" class="form-control" onchange="return fileValidation()" id="file">
+        <!-- -->
         <br>
         <p class="text-danger text-center" id="submit-warning">You must be signed in to submit a form!</p>
         <div class="d-flex justify-content-center"><button type="button" class="btn btn-warning" id="form-submit-button" onclick="submitForm()" disabled>Submit</button></div>
@@ -106,7 +106,42 @@
             });
            
         }
+        function fileValidation() {
+            var fileInput = 
+                document.getElementById('file');
+              
+            var filePath = fileInput.value;
+          
+            var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif|\.pdf)$/i;
+              
+            if (!allowedExtensions.exec(filePath)) {
+                alert('Invalid file type');
+                fileInput.value = '';
+                return false;
+            } else {
+            }
+        }
+        function uploadimage(){
+            var storage = firebase.storage();
+            var file=document.getElementById("file").files[0];
+            var storageref=storage.ref();
+            var thisref=storageref.child(file.name).put(file);
+            thisref.on('state_changed',function(snapshot) {
 
+
+            }, function(error) {
+
+            }, function() {
+            thisref.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                document.getElementById("url").value=downloadURL;
+                alert('uploaded successfully');
+                saveMessage(downloadURL);
+            });
+            });
+        }
+        function getInputVal(id){
+        return document.getElementById(id).value;
+        }
   </script>
 </body>
 </html>
