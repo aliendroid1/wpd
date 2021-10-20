@@ -16,6 +16,9 @@ document.write
                 <a class="nav-link" href="resourceForm.html">Share Resources</a>
                 </li>
                 <li class="nav-item">
+                <a class="nav-link" href="resourceFind.html">Find Resources</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="uploadResources.html">UploadResources</a>
                 </li>
              

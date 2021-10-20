@@ -22,7 +22,7 @@ document.write
     <script src="/__/firebase/7.17.1/firebase-firestore.js"></script>
     <script src="/__/firebase/7.17.1/firebase-functions.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-storage.js"></script> 
-    <script src="/__/firebase/init.js?useEmulator=true"></script>
+    <script src="/__/firebase/init.js"></script>
     <script src="authScript.js"></script>
     
 `)

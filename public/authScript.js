@@ -63,6 +63,16 @@ var config = {
   storageBucket: "wpdresourcehub.appspot.com",
   messagingSenderId: "865510208619",
 };
+var firebaseConfig = {
+  apiKey: "AIzaSyDUxm4IWiOSAzeAhbm3xzdcqTKllQpiyss",
+authDomain: "wpdresourcehub.firebaseapp.com",
+storageBucket: "wpdresourcehub.appspot.com",
+messagingSenderId: "865510208619",
+projectId: "wpdresourcehub",
+appId: "1:865510208619:web:b2cfc8b743e752fd5b2d2e"
+};
+
+
 
 // var serviceAccount = require("wpdresourcehub-e3af9d78a67e.json");
   // projectId: "wpdresourcehub",
