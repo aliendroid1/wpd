@@ -20,7 +20,6 @@
                 .then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
                         profile=doc;
-                    // doc.data() is never undefined for query doc snapshots
                     document.getElementById('id').value = doc.id;
                     document.getElementById('user-displayName').value = doc.data().name;
                     document.getElementById('user-id').value = doc.data().id_number;
@@ -28,14 +27,12 @@
                     document.getElementById('user-phone').value = doc.data().phone;
                     document.getElementById('user-stationNumber').value = doc.data().station_phone;
                     document.getElementById('profile-changes-submit-btn').disabled = false;
-
-                    // console.log(doc.id);
                     });
                 })
                 .catch((e) => {
                     console.log(e);
                 });
-            }
+             }
         });
         function submitForm()
         {

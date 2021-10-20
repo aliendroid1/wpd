@@ -17,7 +17,7 @@ document.write
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="/__/firebase/7.17.1/firebase-app.js"></script>
     <script src="/__/firebase/7.17.1/firebase-auth.js"></script>
-    <script src="/__/firebase/7.17.1/firebase.storage.js"></script>
+    
     <script src="/__/firebase/7.17.1/firebase-database.js"></script>
     <script src="/__/firebase/7.17.1/firebase-firestore.js"></script>
     <script src="/__/firebase/7.17.1/firebase-functions.js"></script>
@@ -27,5 +27,5 @@ document.write
     
 `)
 /*<script src="graph.js"></script>
-
+<script src="/__/firebase/7.17.1/firebase.storage.js"></script>
 */
