@@ -4,7 +4,7 @@
 </head>
 <body>
     <script src="writeNavbar.js"></script>
-
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
     <h1 class="text-center">Resources Submission</h1>
     <div class="container mt-3">
         <input type="hidden" id="id">
@@ -19,18 +19,158 @@
         <input type="text" class="form-control" id="user-phone" disabled >
         <label>Station Phone Number: </label>
         <input type="text" class="form-control" id="user-stationNumber" disabled >
-        <label>Departments:      </label><select class="form-control" id="departments">
+        <label>Comments: </label>
+        <textarea class="form-control" id="comment"></textarea>
+        <br><br>
+        <!-- <h5>Share Resource by Department or Search by Title:</h5> -->
+        <label>Departments:      </label><select class="form-control" id="departments" onchange="getReources(this.value);">
         </select>
-        <h5>Link Selection:</h5>
-            <div class="checkbox"><label><input type="checkbox" value="">   WPD Section Website </label></div>
-            <div class="checkbox"><label><input type="checkbox" value="">   WPD Website</label></div>
-            <div class="checkbox"><label><input type="checkbox" value="">   Wichita Gov Website</label></div>
+        <br><h5>OR</h5>
+        <label>Find Resource by Title:<span style="color:red">Case sensitive</span> </label>
+        <input type="text" class="form-control" id="resorce-title"><br><input type="button" value="Find" onclick="searchRes()" />
+        
+        <div class="row">
+        <div class="col-6">
+            <br><h5>Resource List:</h5>
+            <div id="resourcelist"></div>
+        </div>
+        <div class="col-6">
+            <br><h5>Selected Resource:</h5>
+            <div id="resourceselected"></div>
+        </div>
+    </div>
         <br>
         <p class="text-danger text-center" id="submit-warning">You must be signed in to submit a form!</p>
-        <div class="d-flex justify-content-center"><button type="button" class="btn btn-warning" id="form-submit-button" onclick="submitPageForm()" disabled>Submit</button></div>
+        <div class="d-flex justify-content-center"><button type="button" class="btn btn-warning" id="form-submit-button" onclick="submitForm()" disabled>Submit</button></div>
         <br>
+        <div class="row">
+            <div class="col-6" id="urldiv"></div>
+            <div class="col-6">
+                <div id="qrcode" style="padding:20px;"></div>
+            </div>
+        </div>
+
     </div>
+   
     <script>
+        var selectedResource=[];
+        var resources = [];
+
+
+        function submitForm()
+        {
+            var shared='';
+            for (var key in selectedResource) {
+                shared+=key+',';
+            }
+            console.log(shared);
+            firebase.auth().onAuthStateChanged(function(user) 
+            {
+                if(user)
+                {
+                    firebase.firestore().collection("share_resources")
+                        .add({
+                            profile     :document.getElementById('id').value,
+                            caseno      :document.getElementById('case-number').value,
+                            comments    :document.getElementById('comment').value,
+                            resources   : shared,
+                        })
+                        .then((ref) => {
+                            url=window.location.hostname+'/sharedResources.html?id='+ref.id;
+                            console.log(url);
+                            new QRCode(document.getElementById("qrcode"), url);
+                            $('#urldiv').html('URL:<a href="'+url+'" target="_blank">'+url+'</a>');
+                        })
+                        .catch((error) => {
+                            console.error("Error updating doc", error);
+                            $('#message').html('Failed to add resource');
+                            $("#danger-alert").show(1000);
+                            setTimeout(function() {
+                                $("#danger-alert").hide(1000);
+                            }, 4000);
+                        });
+                 }
+            });
+           
+        }
+
+        function setMe(id,resources){
+            var resourcelist='';
+            $('#resourceselected').html(resourcelist); 
+            if (id in selectedResource) {
+                delete selectedResource[id];
+            } else {
+                selectedResource[id]= resources[id];
+            }
+            for (var key in selectedResource) {
+                if (selectedResource[key].url!='') {
+                    resourcelist+="<input type='hidden' name='resource[]' value='"+id+"' /><div class='checkbox'><a href='"+selectedResource[key].url+"' target='_blank'>"+selectedResource[key].title+"</a></div>";  
+                      
+                }
+            }
+            $('#resourceselected').html(resourcelist); 
+        }
+        
+        function searchRes(){
+            firebase.auth().onAuthStateChanged(function(user) 
+            {
+                var resourcelist='';
+                resources = [];
+                resources.length=0;
+                $('#resourcelist').html('');
+                if ($('#resorce-title').val()!='') {
+                    firebase.firestore().collection("upload_resources")
+                    .orderBy('title')
+                    .startAt($('#resorce-title').val()).endAt($('#resorce-title').val()+'\uf8ff')
+                    .get()
+                    .then((querySnapshot) => {
+                        querySnapshot.forEach((doc) => {
+                            resourcelist+="<div class='checkbox'><label><input type='checkbox' onclick='setMe(this.value,resources);' value='"+doc.id+"'>";
+                                if (doc.data().url!='') {
+                                    resourcelist+="   <a href='"+doc.data().url+"' id='"+doc.id+"' target='_blank'>"+doc.data().title+"</a></label></div>";      
+                                }
+                                resources[doc.id]=doc.data();
+                        });
+                        $('#resourcelist').html(resourcelist);
+                    })
+                    .catch((e) => {
+                        console.log(e);
+                    });
+
+                   
+                }
+                   
+                
+            });
+        }
+        function getReources(depart){
+            firebase.auth().onAuthStateChanged(function(user) 
+            {
+                var resourcelist='';
+                resources = [];
+                resources.length=0;
+                $('#resourcelist').html('');
+                firebase.firestore().collection("upload_resources")
+                .where("department", "==", depart)
+                .get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach((doc) => {
+                        resourcelist+="<div class='checkbox'><label><input type='checkbox' onclick='setMe(this.value,resources);' value='"+doc.id+"'>";
+                            if (doc.data().url!='') {
+                                resourcelist+="   <a href='"+doc.data().url+"' id='"+doc.id+"' target='_blank'>"+doc.data().title+"</a></label></div>";      
+                            }
+                            resources[doc.id]=doc.data();
+                    });
+                    $('#resourcelist').html(resourcelist);
+                })
+                .catch((e) => {
+                    console.log(e);
+                });
+
+                   
+                
+            });
+        }
         firebase.auth().onAuthStateChanged(function(user) 
         {
             console.log('USer');

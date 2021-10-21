@@ -1,0 +1,101 @@
+<head>        
+    <script src="writeHeaderData.js"></script>
+    <title>WPD Resource Hub</title>
+</head>
+<body>
+    <img src="wpdLogo.jpeg" alt="wsu logo" height="200">    
+
+    <h1 class="text-center">Shared Document</h1>
+    
+    <div class="container mt-3">
+        <label>Case Number: </label>
+        <input type="text" class="form-control" id="case-number" disabled>
+        <label>Name:        </label><input type="text" class="form-control" id="officer-name" disabled>
+        <label>ID Number: </label>
+        <input type="text" class="form-control" id="user-id" disabled >
+        <label>Employee Rank: </label>
+        <input type="text" class="form-control" id="user-rank" disabled >
+        <label>Email:       </label><input type="email" class="form-control" id="officer-email" disabled>
+        <label>Phone Number: </label>
+        <input type="text" class="form-control" id="user-phone" disabled >
+        <label>Station Phone Number: </label>
+        <input type="text" class="form-control" id="user-stationNumber" disabled >
+        <label>Comments: </label>
+        <textarea class="form-control" id="comment" disabled ></textarea>
+        <br><br>
+        <br><h5>Resource List:</h5>
+        <div id="resourcelist"></div>
+        <br><br><br><br>
+    </div>
+    <script>
+        var selectedResource=[];
+        function getProfile(id) {
+            firebase.firestore().collection("profile")
+            .where(firebase.firestore.FieldPath.documentId(), '==', id)
+            .get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach((doc) => {
+                    document.getElementById('officer-email').value = doc.data().email;
+                    document.getElementById('officer-name').value = doc.data().name;
+                    document.getElementById('user-id').value = doc.data().id_number;
+                    document.getElementById('user-rank').value = doc.data().rank;
+                    document.getElementById('user-phone').value = doc.data().phone;
+                    document.getElementById('user-stationNumber').value = doc.data().station_phone;
+                    });
+                })
+                .catch((e) => {
+                    console.log(e);
+                });
+        }
+        function getResources(id) {
+            var resourcelist='';
+            reso=id.split(',');
+           
+            for (i=0; i<reso.length;i++) {
+                if (reso[i]!='') {
+                firebase.firestore().collection("upload_resources")
+                .where(firebase.firestore.FieldPath.documentId(), '==', reso[i])
+                .get()
+                    .then((querySnapshot) => {
+                        querySnapshot.forEach((doc) => {
+                            selectedResource[doc.id]=doc.data();
+                            if (selectedResource[doc.id].url!='') {
+                                resourcelist+="<div class='checkbox'><a href='"+doc.data().url+"' target='_blank'>"+selectedResource[doc.id].title+"</a></div>"; 
+                            }
+                            console.log(resourcelist);
+                        });
+                        $('#resourcelist').html(resourcelist); 
+                    })
+                    .catch((e) => {
+                        console.log(e);
+                    });
+                }
+            }
+        }
+
+        function getParameterByName(name, url = window.location.href) {
+            name = name.replace(/[\[\]]/g, '\\$&');
+            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        }
+
+        firebase.firestore().collection("share_resources")
+        .where(firebase.firestore.FieldPath.documentId(), '==', getParameterByName('id'))
+        .get()
+        .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+            document.getElementById('case-number').value = doc.data().caseno;
+            document.getElementById('comment').value = doc.data().comments;
+           getProfile(doc.data().profile);
+           getResources(doc.data().resources);
+            });
+        })
+        .catch((e) => {
+            console.log(e);
+        });
+</script>
+</body>
+</html>
