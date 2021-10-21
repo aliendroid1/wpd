@@ -17,7 +17,7 @@ document.write
                 </li>
                 
                 <li class="nav-item">
-                    <a class="nav-link" href="uploadResources.html">UploadResources</a>
+                    <a class="nav-link" href="uploadResources.html">Upload Resources</a>
                 </li>
              
                 <li class="nav-item">
