@@ -105,7 +105,15 @@
             for (var key in selectedResource) {
                 if (selectedResource[key].url!='') {
                     resourcelist+="<input type='hidden' name='resource[]' value='"+id+"' /><div class='checkbox'><a href='"+selectedResource[key].url+"' target='_blank'>"+selectedResource[key].title+"</a></div>";  
-                      
+                } else {
+                    resourcelist+="<div class='checkbox'>";
+                    var fileList=selectedResource[key].fileList.split(',');
+                    for (i=0;i<fileList.length;i++) {
+                        if (fileList[i]!='') {
+                            resourcelist+="   <a href='"+fileList[i]+"' target='_blank'>"+selectedResource[key].title +"("+selectedResource[key].document_name+")"+"</a>,&nbsp;&nbsp;&nbsp;";      
+                        }
+                    }
+                    resourcelist+="</div>";
                 }
             }
             $('#resourceselected').html(resourcelist); 
@@ -128,6 +136,14 @@
                             resourcelist+="<div class='checkbox'><label><input type='checkbox' onclick='setMe(this.value,resources);' value='"+doc.id+"'>";
                                 if (doc.data().url!='') {
                                     resourcelist+="   <a href='"+doc.data().url+"' id='"+doc.id+"' target='_blank'>"+doc.data().title+"</a></label></div>";      
+                                } else {
+                                    var fileList=doc.data().fileList.split(',');
+                                    for (i=0;i<fileList.length;i++) {
+                                        if (fileList[i]!='') {
+                                            resourcelist+="   <a href='"+fileList[i]+"' id='"+doc.id+"' target='_blank'>"+doc.data().title +"("+doc.data().document_name+")"+"</a>,&nbsp;&nbsp;&nbsp;";      
+                                        }
+                                    }
+                                    resourcelist+="</label></div>";
                                 }
                                 resources[doc.id]=doc.data();
                         });
@@ -158,6 +174,14 @@
                         resourcelist+="<div class='checkbox'><label><input type='checkbox' onclick='setMe(this.value,resources);' value='"+doc.id+"'>";
                             if (doc.data().url!='') {
                                 resourcelist+="   <a href='"+doc.data().url+"' id='"+doc.id+"' target='_blank'>"+doc.data().title+"</a></label></div>";      
+                            }else {
+                                var fileList=doc.data().fileList.split(',');
+                                for (i=0;i<fileList.length;i++) {
+                                    if (fileList[i]!='') {
+                                        resourcelist+="   <a href='"+fileList[i]+"' id='"+doc.id+"' target='_blank'>"+doc.data().title +"("+doc.data().document_name+")"+"</a>,&nbsp;&nbsp;&nbsp;";      
+                                    }
+                                }
+                                resourcelist+="</label></div>";
                             }
                             resources[doc.id]=doc.data();
                     });

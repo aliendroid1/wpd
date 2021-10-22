@@ -61,6 +61,15 @@
                             selectedResource[doc.id]=doc.data();
                             if (selectedResource[doc.id].url!='') {
                                 resourcelist+="<div class='checkbox'><a href='"+doc.data().url+"' target='_blank'>"+selectedResource[doc.id].title+"</a></div>"; 
+                            } else {
+                                resourcelist+="<div class='checkbox'>";
+                                var fileList=doc.data().fileList.split(',');
+                                for (i=0;i<fileList.length;i++) {
+                                    if (fileList[i]!='') {
+                                        resourcelist+="   <a href='"+fileList[i]+"' id='"+doc.id+"' target='_blank'>"+doc.data().title +"("+doc.data().document_name+")"+"</a>,&nbsp;&nbsp;&nbsp;";      
+                                    }
+                                }
+                                resourcelist+="</div>";
                             }
                             console.log(resourcelist);
                         });

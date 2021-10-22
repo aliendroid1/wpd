@@ -15,19 +15,36 @@
         <span id="message"></span>
       </div>
     <div class="container mt-3">
+        <input type="hidden" id="fileList" />
         <label>Departments:      </label><select class="form-control" id="departments">
             </select>
         <label>Title:      </label><input type="text"   class="form-control" id="link-name">
         <label>link     :      </label><input type="url"   class="form-control" id="link">
         <label>Document Name     :      </label><input type="text" class="form-control" id="docName">
-        <label>Image/PDF     :      </label><input type="file" class="form-control" onchange="return fileValidation()" id="file">
+        <label>Image/PDF     :      </label><a href="#theModal" data-remote="/test.html" data-toggle="modal" data-target="#theModal">Click here to Upload</a><!--<input type="file" class="form-control" onchange="return fileValidation()" id="file"> -->
         <!-- -->
         <br>
+        <div id="uploaded"></div>
         <p class="text-danger text-center" id="submit-warning">You must be signed in to submit a form!</p>
         <div class="d-flex justify-content-center"><button type="button" class="btn btn-warning" id="form-submit-button" onclick="submitForm()" disabled>Submit</button></div>
         <br>
     </div>
-   
+    <div class="modal fade" id="theModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Upload Document</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                   <iframe src="uploadfiles.html" style="width:100%;height:100%;border:0px"></iframe>
+                </div>
+                
+            </div>
+        </div>
+    </div>
     <script>
         firebase.auth().onAuthStateChanged(function(user) 
         {
@@ -45,7 +62,10 @@
             }
         });
         
-    
+        function imageURL(url){
+            $('#fileList').val($('#fileList').val()+','+url);
+            $('#uploaded').html($('#uploaded').html()+'<br><a href="'+url+'" target="_blank">'+url+'</a>');
+        }
         function getDeparts(){
             firebase.auth().onAuthStateChanged(function(user) 
             {
@@ -85,6 +105,7 @@
                             title           : document.getElementById("link-name").value,
                             url             : document.getElementById("link").value,
                             document_name   : document.getElementById("docName").value,
+                            fileList        : document.getElementById("fileList").value,
                         })
                         .then(() => {
                             console.log("Document updated"); // Document updated
@@ -143,6 +164,7 @@
         function getInputVal(id){
         return document.getElementById(id).value;
         }
+        
   </script>
 </body>
 </html>
