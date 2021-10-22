@@ -11,7 +11,7 @@
         {
             if(user)
             {
-                
+                document.getElementById('profile-changes-submit-btn').disabled = false;
                 document.getElementById('user-email').value = user.email;
                 firebase.firestore().collection("profile")
                 .where("email", "==", user.email)
@@ -26,7 +26,7 @@
                     document.getElementById('user-rank').value = doc.data().rank;
                     document.getElementById('user-phone').value = doc.data().phone;
                     document.getElementById('user-stationNumber').value = doc.data().station_phone;
-                    document.getElementById('profile-changes-submit-btn').disabled = false;
+                    
                     });
                 })
                 .catch((e) => {
