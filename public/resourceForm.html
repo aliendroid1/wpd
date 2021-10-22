@@ -79,7 +79,7 @@
                             url=window.location.hostname+'/sharedResources.html?id='+ref.id;
                             console.log(url);
                             new QRCode(document.getElementById("qrcode"), url);
-                            $('#urldiv').html('URL:<a href="'+url+'" target="_blank">'+url+'</a>');
+                            $('#urldiv').html('URL:<a href="http://'+url+'" target="_blank">'+url+'</a>');
                         })
                         .catch((error) => {
                             console.error("Error updating doc", error);
