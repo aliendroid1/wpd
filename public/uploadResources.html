@@ -64,7 +64,7 @@
         
         function imageURL(url){
             $('#fileList').val($('#fileList').val()+','+url);
-            $('#uploaded').html($('#uploaded').html()+'<br><a href="'+url+'" target="_blank">'+url+'</a>');
+          //  $('#uploaded').html($('#uploaded').html()+'<br><a href="'+url+'" target="_blank">'+url+'</a>');
         }
         function getDeparts(){
             firebase.auth().onAuthStateChanged(function(user) 
