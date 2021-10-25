@@ -59,9 +59,10 @@
                     .then((querySnapshot) => {
                         querySnapshot.forEach((doc) => {
                             selectedResource[doc.id]=doc.data();
-                            if (selectedResource[doc.id].url!='') {
+                            if (selectedResource[doc.id].url!='' && selectedResource[doc.id].url!== undefined) {
                                 resourcelist+="<div class='checkbox'><a href='"+doc.data().url+"' target='_blank'>"+selectedResource[doc.id].title+"</a></div>"; 
-                            } else {
+                            }
+                            if (selectedResource[doc.id].fileList && selectedResource[doc.id].fileList!== undefined) {
                                 resourcelist+="<div class='checkbox'>";
                                 var fileList=doc.data().fileList.split(',');
                                 for (i=0;i<fileList.length;i++) {

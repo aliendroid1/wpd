@@ -12,10 +12,8 @@
 	<form class="container" id="contactForm">
 		<div class="card" id="card">
 			<div class="card-body">
-				<input type="file" name="files[]" id="files">
-				<input type="hidden"
-					name="url" onchange="return fileValidation()"
-					id="url"><br><br>
+				<input type="file" name="files[]" id="files" multiple onchange="return fileValidation()">
+				<br><br>
 				<button type="button" onclick="uploadimage() ">
 				Upload Doc/Image
 				</button>
@@ -69,34 +67,38 @@ document.getElementById(
 	'contactForm').addEventListener('submit', submitForm);
 //uploading file in storage
 function uploadimage(){
+	var done=false;
 	$('#card').hide();
 	$('#loader').show();
 	var storage = firebase.storage();
-	var file=document.getElementById("files").files[0];
-	var storageref=storage.ref();
-	var fn = file.name.split('.');
-	var newname =new Date().getTime() / 1000;
-	var thisref=storageref.child(newname+'.'+fn[(fn.length-1)]).put(file);
-thisref.on('state_changed',function(snapshot) {
+	for (var i = 0; i < document.getElementById("files").files.length; i++) {
+		var file=document.getElementById("files").files[i];
+		var storageref=storage.ref();
+		var fn = file.name.split('.');
+		var newname =new Date().getTime() / 1000;
+		var thisref=storageref.child(newname+'.'+fn[(fn.length-1)]).put(file);
+		thisref.on('state_changed',function(snapshot) {
+			
+		}, function(error) {
 
-
-}, function(error) {
-
-}, function() {
-// Upload completed successfully, now we can get the download URL
-thisref.snapshot.ref.getDownloadURL().then(function(downloadURL) {
-	//getting url of image
-	document.getElementById("url").value=downloadURL;
-	alert('uploaded successfully');
-	console.log(downloadURL);
-	window.parent.imageURL(downloadURL);
-	$('#card').show();
-	$('#loader').hide();
-});
-});
-
+		}, function() {
+		// Upload completed successfully, now we can get the download URL
+			thisref.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+				//getting url of image
+				//document.getElementById("url").value=downloadURL;
+				done=true;
+				
+				console.log(downloadURL);
+				window.parent.imageURL(downloadURL);
+				$('#card').show();
+				$('#loader').hide();
+			});
+	
+		});
+}
+if (done) alert('uploaded successfully');
 // Get values
-var url = getInputVal('url');
+//var url = getInputVal('url');
 // Save message
 // saveMessage(url);
 }
@@ -112,19 +114,23 @@ return document.getElementById(id).value;
 }
 
 function fileValidation() {
+	var ret=true;
 	var fileInput = 
-		document.getElementById('file');
+		document.getElementById('files');
+	for (var i = 0; i < fileInput.files.length; i++) {
+		var filePath = fileInput.files[i].name;
 		
-	var filePath = fileInput.value;
-	
-	var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif|\.pdf)$/i;
-		
-	if (!allowedExtensions.exec(filePath)) {
-		alert('Invalid file type');
-		fileInput.value = '';
-		return false;
-	} else {
+		var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif|\.pdf)$/i;
+			
+		if (!allowedExtensions.exec(filePath)) {
+			alert('Invalid file type');
+			fileInput.value = '';
+			ret= false;
+		} else {
+			console.log(filePath);
+		}
 	}
+	return ret;
 }
 
 </script>

@@ -104,8 +104,14 @@
             }
             for (var key in selectedResource) {
                 if (selectedResource[key].url!='') {
-                    resourcelist+="<input type='hidden' name='resource[]' value='"+id+"' /><div class='checkbox'><a href='"+selectedResource[key].url+"' target='_blank'>"+selectedResource[key].title+"</a></div>";  
-                } else {
+                    var urlList=selectedResource[key].url.split(',');
+                    for (i=0;i<urlList.length;i++) {
+                        if (urlList[i]!='') {
+                            resourcelist+="<input type='hidden' name='resource[]' value='"+id+"' /><div class='checkbox'><a href='"+urlList[i]+"' target='_blank'>"+selectedResource[key].title+"</a></div>";  
+                        }
+                    }
+                }
+                if (selectedResource[key].fileList!=''){
                     resourcelist+="<div class='checkbox'>";
                     var fileList=selectedResource[key].fileList.split(',');
                     for (i=0;i<fileList.length;i++) {
@@ -134,18 +140,28 @@
                     .then((querySnapshot) => {
                         querySnapshot.forEach((doc) => {
                             resourcelist+="<div class='checkbox'><label><input type='checkbox' onclick='setMe(this.value,resources);' value='"+doc.id+"'>";
-                                if (doc.data().url!='') {
-                                    resourcelist+="   <a href='"+doc.data().url+"' id='"+doc.id+"' target='_blank'>"+doc.data().title+"</a></label></div>";      
-                                } else {
-                                    var fileList=doc.data().fileList.split(',');
-                                    for (i=0;i<fileList.length;i++) {
-                                        if (fileList[i]!='') {
-                                            resourcelist+="   <a href='"+fileList[i]+"' id='"+doc.id+"' target='_blank'>"+doc.data().title +"("+doc.data().document_name+")"+"</a>,&nbsp;&nbsp;&nbsp;";      
+                            if (doc.data().url!='' &&  doc.data().url!== undefined) {
+                                console.log(doc.data().url);
+                                var urlList=doc.data().url.split(',');
+                                    for (i=0;i<urlList.length;i++) {
+                                        
+                                        if (urlList[i]!='') {
+                                             resourcelist+="<a href='"+urlList[i]+"' target='_blank'>"+doc.data().title+"("+urlList[i]+")</a>,&nbsp;&nbsp;&nbsp;";  
                                         }
                                     }
-                                    resourcelist+="</label></div>";
+                                //resourcelist+="</label></div>";//"   <a href='"+doc.data().url+"' id='"+doc.id+"' target='_blank'>"+doc.data().title+"</a></label></div>";      
+                            }
+                            if (doc.data().fileList!='' &&  doc.data().fileList!== undefined){
+                                console.log(doc.id);
+                                var fileList=doc.data().fileList.split(',');
+                                for (i=0;i<fileList.length;i++) {
+                                    if (fileList[i]!='') {
+                                        resourcelist+="   <a href='"+fileList[i]+"' id='"+doc.id+"' target='_blank'>"+doc.data().title +"("+doc.data().document_name+"[img/doc])"+"</a>,&nbsp;&nbsp;&nbsp;";      
+                                    }
                                 }
-                                resources[doc.id]=doc.data();
+                               
+                            } resourcelist+="</label></div>";
+                            resources[doc.id]=doc.data();
                         });
                         $('#resourcelist').html(resourcelist);
                     })
@@ -172,17 +188,27 @@
                 .then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
                         resourcelist+="<div class='checkbox'><label><input type='checkbox' onclick='setMe(this.value,resources);' value='"+doc.id+"'>";
-                            if (doc.data().url!='') {
-                                resourcelist+="   <a href='"+doc.data().url+"' id='"+doc.id+"' target='_blank'>"+doc.data().title+"</a></label></div>";      
-                            }else {
+                            if (doc.data().url!='' &&  doc.data().url!== undefined) {
+                                console.log(doc.data().url);
+                                var urlList=doc.data().url.split(',');
+                                    for (i=0;i<urlList.length;i++) {
+                                        
+                                        if (urlList[i]!='') {
+                                             resourcelist+="<a href='"+urlList[i]+"' target='_blank'>"+doc.data().title+"("+urlList[i]+")</a>,&nbsp;&nbsp;&nbsp;";  
+                                        }
+                                    }
+                                //resourcelist+="</label></div>";//"   <a href='"+doc.data().url+"' id='"+doc.id+"' target='_blank'>"+doc.data().title+"</a></label></div>";      
+                            }
+                            if (doc.data().fileList!='' &&  doc.data().fileList!== undefined){
+                                console.log(doc.id);
                                 var fileList=doc.data().fileList.split(',');
                                 for (i=0;i<fileList.length;i++) {
                                     if (fileList[i]!='') {
-                                        resourcelist+="   <a href='"+fileList[i]+"' id='"+doc.id+"' target='_blank'>"+doc.data().title +"("+doc.data().document_name+")"+"</a>,&nbsp;&nbsp;&nbsp;";      
+                                        resourcelist+="   <a href='"+fileList[i]+"' id='"+doc.id+"' target='_blank'>"+doc.data().title +"("+doc.data().document_name+"[img/doc])"+"</a>,&nbsp;&nbsp;&nbsp;";      
                                     }
                                 }
-                                resourcelist+="</label></div>";
-                            }
+                               
+                            } resourcelist+="</label></div>";
                             resources[doc.id]=doc.data();
                     });
                     $('#resourcelist').html(resourcelist);

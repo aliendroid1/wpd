@@ -19,7 +19,7 @@
         <label>Departments:      </label><select class="form-control" id="departments">
             </select>
         <label>Title:      </label><input type="text"   class="form-control" id="link-name">
-        <label>link     :      </label><input type="url"   class="form-control" id="link">
+        <label>link(Put one link/URL per line)     :      </label><textarea  class="form-control" id="link"></textarea>
         <label>Document Name     :      </label><input type="text" class="form-control" id="docName">
         <label>Image/PDF     :      </label><a href="#theModal" data-remote="/test.html" data-toggle="modal" data-target="#theModal">Click here to Upload</a><!--<input type="file" class="form-control" onchange="return fileValidation()" id="file"> -->
         <!-- -->
@@ -99,11 +99,13 @@
             {
                 if(user)
                 {
+                    var links=document.getElementById("link").value.replace(/\n/g, ",");;
+                    
                     firebase.firestore().collection("upload_resources")
                         .add({
                             department      : document.getElementById("departments").value,
                             title           : document.getElementById("link-name").value,
-                            url             : document.getElementById("link").value,
+                            url             : links,//document.getElementById("link").value,
                             document_name   : document.getElementById("docName").value,
                             fileList        : document.getElementById("fileList").value,
                         })
