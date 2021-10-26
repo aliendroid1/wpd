@@ -40,7 +40,8 @@
             {
                 if(user)
                 {
-                    firebase.firestore().collection("profile").doc(document.getElementById('id').value)
+                    if (document.getElementById('id').value!='') {
+                        firebase.firestore().collection("profile").doc(document.getElementById('id').value)
                         .update({
                             name            : document.getElementById("user-displayName").value,
                             id_number       : document.getElementById("user-id").value,
@@ -64,6 +65,33 @@
                                 $("#danger-alert").hide(1000);
                             }, 4000);
                         });
+                    } else {
+                        firebase.firestore().collection("profile")
+                        .add({
+                            email           :user.email,
+                            name            : document.getElementById("user-displayName").value,
+                            id_number       : document.getElementById("user-id").value,
+                            rank            : document.getElementById("user-rank").value,
+                            phone           : document.getElementById("user-phone").value,
+                            station_phone   : document.getElementById("user-stationNumber").value,
+                        })
+                        .then((ref) => {
+                            console.log("Document updated"); // Document updated
+                            $('#message').html('Profile created successfull');
+                            $("#success-alert").show(1000);
+                            setTimeout(function() {
+                                $("#success-alert").hide(1000);
+                            }, 4000);
+                        })
+                        .catch((error) => {
+                            console.error("Error updating", error);
+                            $('#message').html('Failed to create profile');
+                            $("#danger-alert").show(1000);
+                            setTimeout(function() {
+                                $("#danger-alert").hide(1000);
+                            }, 4000);
+                        });
+                    }
                 }
             });
         }
