@@ -1,6 +1,19 @@
 <head>        
     <script src="writeHeaderData.js"></script>
     <title>WPD Resource Hub</title>
+    <style>
+        @media screen and (max-width: 980px) {
+            .col-6 {
+                width:100%;
+                -ms-flex: 0 0 100%;
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+        }
+        #qrcode img{
+            margin: 0 auto;
+        }
+    </style>
 </head>
 <body>
     <script src="writeNavbar.js"></script>
@@ -44,10 +57,11 @@
         <div class="d-flex justify-content-center"><button type="button" class="btn btn-warning" id="form-submit-button" onclick="submitForm()" disabled>Submit</button></div>
         <br>
         <div class="row">
-            <div id="urldiv" style="padding:20px;"></div>
-            <div >
+            
+            <div  style="width:100%;text-align: center;">
                 <div id="qrcode" style="padding:20px;"></div>
             </div>
+            <div id="urldiv" style="width:100%;padding:20px;"></div>
         </div>
 
     </div>
@@ -59,39 +73,40 @@
 
         function submitForm()
         {
-            var shared='';
-            for (var key in selectedResource) {
-                shared+=key+',';
-            }
-            console.log(shared);
-            firebase.auth().onAuthStateChanged(function(user) 
-            {
-                if(user)
+            if (document.getElementById('officer-email').value!="") {
+                var shared='';
+                for (var key in selectedResource) {
+                    shared+=key+',';
+                }
+                console.log(shared);
+                firebase.auth().onAuthStateChanged(function(user) 
                 {
-                    firebase.firestore().collection("share_resources")
-                        .add({
-                            profile     :document.getElementById('id').value,
-                            caseno      :document.getElementById('case-number').value,
-                            comments    :document.getElementById('comment').value,
-                            resources   : shared,
-                        })
-                        .then((ref) => {
-                            url=window.location.hostname+'/sharedResources.html?id='+ref.id;
-                            console.log(url);
-                            new QRCode(document.getElementById("qrcode"), url);
-                            $('#urldiv').html('URL:<a href="http://'+url+'" target="_blank">'+url+'</a>');
-                        })
-                        .catch((error) => {
-                            console.error("Error updating doc", error);
-                            $('#message').html('Failed to add resource');
-                            $("#danger-alert").show(1000);
-                            setTimeout(function() {
-                                $("#danger-alert").hide(1000);
-                            }, 4000);
-                        });
-                 }
-            });
-           
+                    if(user)
+                    {
+                        firebase.firestore().collection("share_resources")
+                            .add({
+                                profile     :document.getElementById('id').value,
+                                caseno      :document.getElementById('case-number').value,
+                                comments    :document.getElementById('comment').value,
+                                resources   : shared,
+                            })
+                            .then((ref) => {
+                                url=window.location.hostname+'/sharedResources.html?id='+ref.id;
+                                console.log(url);
+                                new QRCode(document.getElementById("qrcode"), url);
+                                $('#urldiv').html('URL:<a href="http://'+url+'" target="_blank">'+url+'</a>');
+                            })
+                            .catch((error) => {
+                                console.error("Error updating doc", error);
+                                $('#message').html('Failed to add resource');
+                                $("#danger-alert").show(1000);
+                                setTimeout(function() {
+                                    $("#danger-alert").hide(1000);
+                                }, 4000);
+                            });
+                    }
+                });
+            }
         }
 
         function setMe(id,resources){
@@ -126,42 +141,93 @@
         }
         
         function searchRes(){
-            firebase.auth().onAuthStateChanged(function(user) 
-            {
-                var resourcelist='';
-                resources = [];
-                resources.length=0;
-                $('#resourcelist').html('');
-                if ($('#resorce-title').val()!='') {
+            if (document.getElementById('officer-email').value!="") {
+                firebase.auth().onAuthStateChanged(function(user) 
+                {
+                    var resourcelist='';
+                    resources = [];
+                    resources.length=0;
+                    $('#resourcelist').html('');
+                    if ($('#resorce-title').val()!='') {
+                        firebase.firestore().collection("upload_resources")
+                        .orderBy('title')
+                        .startAt($('#resorce-title').val()).endAt($('#resorce-title').val()+'\uf8ff')
+                        .get()
+                        .then((querySnapshot) => {
+                            querySnapshot.forEach((doc) => {
+                                resourcelist+="<div class='checkbox'><label><input type='checkbox' onclick='setMe(this.value,resources);' value='"+doc.id+"'>";
+                                if (doc.data().url!='' &&  doc.data().url!== undefined) {
+                                    console.log(doc.data().url);
+                                    var urlList=doc.data().url.split(',');
+                                        for (i=0;i<urlList.length;i++) {
+                                            
+                                            if (urlList[i]!='') {
+                                                resourcelist+="<a href='"+urlList[i]+"' target='_blank'>"+doc.data().title+"("+urlList[i]+")</a>,&nbsp;&nbsp;&nbsp;";  
+                                            }
+                                        }
+                                    //resourcelist+="</label></div>";//"   <a href='"+doc.data().url+"' id='"+doc.id+"' target='_blank'>"+doc.data().title+"</a></label></div>";      
+                                }
+                                if (doc.data().fileList!='' &&  doc.data().fileList!== undefined){
+                                    console.log(doc.id);
+                                    var fileList=doc.data().fileList.split(',');
+                                    for (i=0;i<fileList.length;i++) {
+                                        if (fileList[i]!='') {
+                                            resourcelist+="   <a href='"+fileList[i]+"' id='"+doc.id+"' target='_blank'>"+doc.data().title +"("+doc.data().document_name+"[img/doc])"+"</a>,&nbsp;&nbsp;&nbsp;";      
+                                        }
+                                    }
+                                
+                                } resourcelist+="</label></div>";
+                                resources[doc.id]=doc.data();
+                            });
+                            $('#resourcelist').html(resourcelist);
+                        })
+                        .catch((e) => {
+                            console.log(e);
+                        });
+
+                    
+                    }
+                    
+                    
+                });
+            }
+        }
+        function getReources(depart){
+            if (document.getElementById('officer-email').value!="") {
+                firebase.auth().onAuthStateChanged(function(user) 
+                {
+                    var resourcelist='';
+                    resources = [];
+                    resources.length=0;
+                    $('#resourcelist').html('');
                     firebase.firestore().collection("upload_resources")
-                    .orderBy('title')
-                    .startAt($('#resorce-title').val()).endAt($('#resorce-title').val()+'\uf8ff')
+                    .where("department", "==", depart)
                     .get()
                     .then((querySnapshot) => {
                         querySnapshot.forEach((doc) => {
                             resourcelist+="<div class='checkbox'><label><input type='checkbox' onclick='setMe(this.value,resources);' value='"+doc.id+"'>";
-                            if (doc.data().url!='' &&  doc.data().url!== undefined) {
-                                console.log(doc.data().url);
-                                var urlList=doc.data().url.split(',');
-                                    for (i=0;i<urlList.length;i++) {
-                                        
-                                        if (urlList[i]!='') {
-                                             resourcelist+="<a href='"+urlList[i]+"' target='_blank'>"+doc.data().title+"("+urlList[i]+")</a>,&nbsp;&nbsp;&nbsp;";  
+                                if (doc.data().url!='' &&  doc.data().url!== undefined) {
+                                    console.log(doc.data().url);
+                                    var urlList=doc.data().url.split(',');
+                                        for (i=0;i<urlList.length;i++) {
+                                            
+                                            if (urlList[i]!='') {
+                                                resourcelist+="<a href='"+urlList[i]+"' target='_blank'>"+doc.data().title+"("+urlList[i]+")</a>,&nbsp;&nbsp;&nbsp;";  
+                                            }
+                                        }
+                                    //resourcelist+="</label></div>";//"   <a href='"+doc.data().url+"' id='"+doc.id+"' target='_blank'>"+doc.data().title+"</a></label></div>";      
+                                }
+                                if (doc.data().fileList!='' &&  doc.data().fileList!== undefined){
+                                    console.log(doc.id);
+                                    var fileList=doc.data().fileList.split(',');
+                                    for (i=0;i<fileList.length;i++) {
+                                        if (fileList[i]!='') {
+                                            resourcelist+="   <a href='"+fileList[i]+"' id='"+doc.id+"' target='_blank'>"+doc.data().title +"("+doc.data().document_name+"[img/doc])"+"</a>,&nbsp;&nbsp;&nbsp;";      
                                         }
                                     }
-                                //resourcelist+="</label></div>";//"   <a href='"+doc.data().url+"' id='"+doc.id+"' target='_blank'>"+doc.data().title+"</a></label></div>";      
-                            }
-                            if (doc.data().fileList!='' &&  doc.data().fileList!== undefined){
-                                console.log(doc.id);
-                                var fileList=doc.data().fileList.split(',');
-                                for (i=0;i<fileList.length;i++) {
-                                    if (fileList[i]!='') {
-                                        resourcelist+="   <a href='"+fileList[i]+"' id='"+doc.id+"' target='_blank'>"+doc.data().title +"("+doc.data().document_name+"[img/doc])"+"</a>,&nbsp;&nbsp;&nbsp;";      
-                                    }
-                                }
-                               
-                            } resourcelist+="</label></div>";
-                            resources[doc.id]=doc.data();
+                                
+                                } resourcelist+="</label></div>";
+                                resources[doc.id]=doc.data();
                         });
                         $('#resourcelist').html(resourcelist);
                     })
@@ -169,57 +235,10 @@
                         console.log(e);
                     });
 
-                   
-                }
-                   
-                
-            });
-        }
-        function getReources(depart){
-            firebase.auth().onAuthStateChanged(function(user) 
-            {
-                var resourcelist='';
-                resources = [];
-                resources.length=0;
-                $('#resourcelist').html('');
-                firebase.firestore().collection("upload_resources")
-                .where("department", "==", depart)
-                .get()
-                .then((querySnapshot) => {
-                    querySnapshot.forEach((doc) => {
-                        resourcelist+="<div class='checkbox'><label><input type='checkbox' onclick='setMe(this.value,resources);' value='"+doc.id+"'>";
-                            if (doc.data().url!='' &&  doc.data().url!== undefined) {
-                                console.log(doc.data().url);
-                                var urlList=doc.data().url.split(',');
-                                    for (i=0;i<urlList.length;i++) {
-                                        
-                                        if (urlList[i]!='') {
-                                             resourcelist+="<a href='"+urlList[i]+"' target='_blank'>"+doc.data().title+"("+urlList[i]+")</a>,&nbsp;&nbsp;&nbsp;";  
-                                        }
-                                    }
-                                //resourcelist+="</label></div>";//"   <a href='"+doc.data().url+"' id='"+doc.id+"' target='_blank'>"+doc.data().title+"</a></label></div>";      
-                            }
-                            if (doc.data().fileList!='' &&  doc.data().fileList!== undefined){
-                                console.log(doc.id);
-                                var fileList=doc.data().fileList.split(',');
-                                for (i=0;i<fileList.length;i++) {
-                                    if (fileList[i]!='') {
-                                        resourcelist+="   <a href='"+fileList[i]+"' id='"+doc.id+"' target='_blank'>"+doc.data().title +"("+doc.data().document_name+"[img/doc])"+"</a>,&nbsp;&nbsp;&nbsp;";      
-                                    }
-                                }
-                               
-                            } resourcelist+="</label></div>";
-                            resources[doc.id]=doc.data();
-                    });
-                    $('#resourcelist').html(resourcelist);
-                })
-                .catch((e) => {
-                    console.log(e);
+                    
+                    
                 });
-
-                   
-                
-            });
+            }
         }
         firebase.auth().onAuthStateChanged(function(user) 
         {

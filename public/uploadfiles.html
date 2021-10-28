@@ -66,8 +66,9 @@ var messagesRef = firebase.database().ref('Checking');
 document.getElementById(
 	'contactForm').addEventListener('submit', submitForm);
 //uploading file in storage
+var done1=false;
 function uploadimage(){
-	var done=false;
+	
 	$('#card').hide();
 	$('#loader').show();
 	var storage = firebase.storage();
@@ -86,21 +87,26 @@ function uploadimage(){
 			thisref.snapshot.ref.getDownloadURL().then(function(downloadURL) {
 				//getting url of image
 				//document.getElementById("url").value=downloadURL;
-				done=true;
+				done1=true;
 				
 				console.log(downloadURL);
 				window.parent.imageURL(downloadURL);
 				$('#card').show();
 				$('#loader').hide();
+				upDone(i);
 			});
 	
 		});
+		
+	}
+	
 }
-if (done) alert('uploaded successfully');
-// Get values
-//var url = getInputVal('url');
-// Save message
-// saveMessage(url);
+function upDone(i){
+	done1=true;
+	console.log(i+'--'+document.getElementById("files").files.length);
+	if ((i+1)>=document.getElementById("files").files.length) {
+		alert('uploaded successfully');
+	}
 }
 function getInputVal(id){
 	document.getElementById('contactForm').reset();
