@@ -13,7 +13,7 @@ document.write
                     <a class="nav-link" href="profile.html">Profile</a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link" href="sharedResources.html">Share Resources</a>
+                <a class="nav-link" href="resourceForm.html">Share Resources</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="uploadResources.html">Upload Resources</a>
