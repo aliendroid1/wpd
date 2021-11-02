@@ -1,6 +1,6 @@
 document.write
 (`
-    <img src="wpdLogo.jpeg" class="img-fluid" alt="wsu logo" width="700" height="345">
+    <img src="wpdLogo.jpeg" class="img-fluid" alt="wpd logo" width="700" height="345">
         
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark sticky-top">
         <a class="navbar-brand" href="index.html">WPD Resource Hub</a>
@@ -13,15 +13,16 @@ document.write
                     <a class="nav-link" href="profile.html">Profile</a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link" href="resourceForm.html">Share Resources</a>
+                <a class="nav-link" href="shareResources.html">Share Resources</a>
                 </li>
-                
                 <li class="nav-item">
                     <a class="nav-link" href="uploadResources.html">Upload Resources</a>
                 </li>
-             
                 <li class="nav-item">
-                    <a class="nav-link" href="#" id="sign-in-button" onclick="toggleSignIn()">-</a>
+                <a class="nav-link" href="viewResources.html">View Resources</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="email-password.html" id="sign-in-button" >-</a>
                 </li>
             </ul>
         </div>
