@@ -13,13 +13,10 @@ document.write
                     <a class="nav-link" href="profile.html">Profile</a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link" href="shareResources.html">Share Resources</a>
+                <a class="nav-link" href="sharedResources.html">Share Resources</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="uploadResources.html">Upload Resources</a>
-                </li>
-                <li class="nav-item">
-                <a class="nav-link" href="viewResources.html">View Resources</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="email-password.html" id="sign-in-button" >-</a>
