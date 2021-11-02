@@ -1,14 +1,13 @@
 
 
+
 function toggleSignIn() //Function called when clicking the Login/Logout button.
 {
     if (!firebase.auth().currentUser)
     {
-        var provider = new firebase.auth.GoogleAuthProvider();
-           
-        //provider.addScope('http://localhost:4000/auth/plus.login');
-        provider.addScope('https://www.googleapis.com/auth/plus.login');
-        firebase.auth().signInWithRedirect(provider);
+        // var provider = new firebase.auth.GoogleAuthProvider();
+        // provider.addScope('https://www.googleapis.com/auth/plus.login');
+        // firebase.auth().signInWithRedirect(provider);
     }
     else 
         {firebase.auth().signOut();}
@@ -16,28 +15,28 @@ function toggleSignIn() //Function called when clicking the Login/Logout button.
 }
 function initApp() //handles setting up UI event listeners and registering Firebase auth listeners:
 { 
-    firebase.auth().getRedirectResult().then(function(result) {
-        if (result.credential) {
-          // This gives you a Google Access Token. You can use it to access the Google API.
-          var token = result.credential.accessToken;
-        //  document.getElementById('quickstart-oauthtoken').textContent = token;
-        } else {
-        //  document.getElementById('quickstart-oauthtoken').textContent = 'null';
-        }
-        var user = result.user;
-      }).catch(function(error) {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        var email = error.email;
-        var credential = error.credential;
-        if (errorCode === 'auth/account-exists-with-different-credential') {
-          alert('You have already signed up with a different auth provider for that email.');
-          // If you are using multiple auth providers on your app you should handle linking
-          // the user's accounts here.
-        } else {
-          console.error(error);
-        }
-      });
+    // firebase.auth().getRedirectResult().then(function(result) {
+    //     if (result.credential) {
+    //       // This gives you a Google Access Token. You can use it to access the Google API.
+    //       var token = result.credential.accessToken;
+    //       d//ocument.getElementById('quickstart-oauthtoken').textContent = token;
+    //     } else {
+    //       //document.getElementById('quickstart-oauthtoken').textContent = 'null';
+    //     }
+    //     var user = result.user;
+    //   }).catch(function(error) {
+    //     var errorCode = error.code;
+    //     var errorMessage = error.message;
+    //     var email = error.email;
+    //     var credential = error.credential;
+    //     if (errorCode === 'auth/account-exists-with-different-credential') {
+    //       alert('You have already signed up with a different auth provider for that email.');
+    //       // If you are using multiple auth providers on your app you should handle linking
+    //       // the user's accounts here.
+    //     } else {
+    //       console.error(error);
+    //     }
+    //   });
     
     firebase.auth().onAuthStateChanged(function (user)// This listener is called when the user is signed in or out, and that is where we update the UI.
     {
@@ -57,28 +56,4 @@ function initApp() //handles setting up UI event listeners and registering Fireb
         document.getElementById('sign-in-button').disabled = false;
     });
 }
-// var config = {
-//   apiKey: "AIzaSyDUxm4IWiOSAzeAhbm3xzdcqTKllQpiyss",
-//   authDomain: "wpdresourcehub.firebaseapp.com",
-//   storageBucket: "wpdresourcehub.appspot.com",
-//   messagingSenderId: "865510208619",
-// };
-// var firebaseConfig = {
-//   apiKey: "AIzaSyDUxm4IWiOSAzeAhbm3xzdcqTKllQpiyss",
-// authDomain: "wpdresourcehub.firebaseapp.com",
-// storageBucket: "wpdresourcehub.appspot.com",
-// messagingSenderId: "865510208619",
-// projectId: "wpdresourcehub",
-// appId: "1:865510208619:web:b2cfc8b743e752fd5b2d2e"
-// };
-
-
-
-// var serviceAccount = require("wpdresourcehub-e3af9d78a67e.json");
-  // projectId: "wpdresourcehub",
-  
-  
-  // appId: "1:865510208619:web:b2cfc8b743e752fd5b2d2e",
-  // measurementId: "G-DPQ35C1Y7F"
-
 window.onload = function (){initApp();};
